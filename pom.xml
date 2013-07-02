@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>minecart-console-example</groupId>
+  <artifactId>minecart-console-example</artifactId>
+  <packaging>pom</packaging>
+  <version>HEAD-SNAPSHOT</version>
+  <modules>
+    <module>minecart-console</module>
+    <module>pizza</module>
+  </modules>
+
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>de.saumya.mojo</groupId>
+        <artifactId>gem-maven-plugin</artifactId>
+        <version>1.0.0-beta</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>initialize</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.7</version>
+        <executions>
+          <execution>
+            <id>add-resource</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-resource</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>${project.build.directory}/rubygems</directory>
+                  <targetPath>rubygems</targetPath>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+      </plugin>
+    </plugins>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>1.4</version>
+          <executions>
+            <execution>
+              <phase>package</phase>
+              <goals>
+                <goal>shade</goal>
+              </goals>
+              <configuration>
+                <shadedArtifactAttached>true</shadedArtifactAttached>
+                <shadedClassifierName>shaded</shadedClassifierName>
+                <artifactSet>
+                  <excludes>
+                    <exclude>*:*:gem:*</exclude>
+                  </excludes>
+                </artifactSet>
+                <!-- signatures from foreign jars are bad news -->
+                <filters>
+                  <filter>
+                    <artifact>*:*</artifact>
+                    <excludes>
+                      <exclude>META-INF/*.SF</exclude>
+                      <exclude>META-INF/*.DSA</exclude>
+                      <exclude>META-INF/*.RSA</exclude>
+                      <!-- We get a LICENSE and a META-INF/license folder.
+                        This make the jar error on decompression because directories
+                        on standard mac are not case sensitive -->
+                      <exclude>META-INF/LICENSE</exclude>
+                    </excludes>
+                  </filter>
+                </filters>
+                <transformers>
+                  <transformer
+                      implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                  <transformer
+                      implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                    <manifestEntries>
+                      <Main-Class>${project.mainclass}</Main-Class>
+                      <Implementation-Build>${buildNumber}</Implementation-Build>
+                    </manifestEntries>
+                  </transformer>
+                </transformers>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+
+  <repositories>
+    <repository>
+      <id>rubygems-release</id>
+      <url>http://rubygems-proxy.torquebox.org/releases</url>
+    </repository>
+  </repositories>
+</project>

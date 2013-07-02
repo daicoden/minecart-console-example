@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <properties>
+    <project.mainclass>com.pizza.PizzaApp</project.mainclass>
+  </properties>
+
+  <parent>
+    <artifactId>minecart-console-example</artifactId>
+    <groupId>minecart-console-example</groupId>
+    <version>HEAD-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>pizza</artifactId>
+
+  <dependencies>
+    <dependency>
+      <groupId>minecart-console-example</groupId>
+      <artifactId>minecart-console</artifactId>
+      <version>HEAD-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>rubygems</groupId>
+      <artifactId>awesome_print</artifactId>
+      <version>1.1.0</version>
+      <type>gem</type>
+    </dependency>
+  </dependencies>
+
+</project>
